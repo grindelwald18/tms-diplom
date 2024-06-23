@@ -1,0 +1,37 @@
+.my-card {
+    width: 32%;
+    border: 2px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 12px;
+}
+
+.main-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.book-image {
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+    margin: auto;
+    object-fit: cover;
+}
+
+.card-body { 
+    text-decoration: none;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap:6px;
+    margin-top: 15px;
+    height: 100%;
+}
+
+.price{
+    font-weight: bold;
+    font-size: 20px;
+}
