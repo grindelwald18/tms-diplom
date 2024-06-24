@@ -10,4 +10,6 @@ export interface IBooksLIst {
     list: IBookInfo[],
     isLoading: boolean,
     error: string | null,
+    limit: number,
+    pagesCount: number | null
 }

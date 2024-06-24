@@ -5,7 +5,9 @@ import { requestNewBooks } from '../services/books'
 const initialState: IBooksLIst = {
   list: [] ,
   isLoading: false,
-  error: null
+  error: null,
+  limit: 6,
+  pagesCount: null
 }
 
 export const fetchBooks = createAsyncThunk('new/fetchBooks', async (_, { rejectWithValue }) => {

@@ -20,7 +20,7 @@
     object-fit: cover;
 }
 
-.card-body { 
+.card-body {
     text-decoration: none;
     color: black;
     display: flex;
@@ -29,7 +29,13 @@
     gap:6px;
     margin-top: 15px;
     height: 100%;
+
+    &:hover {
+      color: gray;
+      transition: transform 0.3s ease-in-out;
+    }
 }
+
 
 .price{
     font-weight: bold;

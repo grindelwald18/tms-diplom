@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
+import { useParams, Link} from "react-router-dom"
 import { AppDispatch, RootState } from '../redux/store'
 import { fetchBooks } from "../redux/booksSlice"
 import { BookCard } from "../components/BookCard"
@@ -30,8 +31,10 @@ export function Books() {
   }
 
   return (
-    <div className="d-flex flex-wrap justify-content-between gap-3" >
-      {renderBooks()}
-    </div>
+    <>
+      <div className="d-flex flex-wrap justify-content-between gap-3" >
+        {renderBooks()}
+      </div>
+    </>
   )
 }
