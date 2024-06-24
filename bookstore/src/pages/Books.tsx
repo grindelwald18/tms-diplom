@@ -1,37 +1,37 @@
+import { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { AppDispatch, RootState } from '../redux/store'
+import { fetchBooks } from "../redux/booksSlice"
 import { BookCard } from "../components/BookCard"
 export function Books() {
-    const book= [
-        {
-          "title": "An Introduction to C & GUI Programming, 2nd Edition",
-          "subtitle": "",
-          "isbn13": "9781912047451",
-          "price": "$14.92",
-          "image": "https://itbook.store/img/books/9781912047451.png",
-          "url": "https://itbook.store/books/9781912047451"
-        },
-        {
-          "title": "Snowflake: The Definitive Guide",
-          "subtitle": "Architecting, Designing, and Deploying on the Snowflake Data Cloud",
-          "isbn13": "9781098103828",
-          "price": "$58.90",
-          "image": "https://itbook.store/img/books/9781098103828.png",
-          "url": "https://itbook.store/books/9781098103828"
-        },
-        {
-          "title": "Python for Data Analysis, 3rd Edition",
-          "subtitle": "Data Wrangling with pandas, NumPy, and Jupyter",
-          "isbn13": "9781098104030",
-          "price": "$36.18",
-          "image": "https://itbook.store/img/books/9781098104030.png",
-          "url": "https://itbook.store/books/9781098104030"
-      }
-      ]
+  const books = useSelector((state: RootState) => state.books.list)
+  const error = useSelector((state: RootState) => state.books.error)
+  const isLoading = useSelector((state: RootState) => state.books.isLoading)
+  const dispatch = useDispatch<AppDispatch>()
 
-    return (
-        <div className="d-flex flex-wrap justify-content-between gap-3" >
-            <BookCard key={book[0]?.isbn13} isbn13={book[0]?.isbn13} image={book[0]?.image} title={book[0].title} subtitle={book[0].subtitle} price={book[0].price} />
-            <BookCard key={book[1]?.isbn13} isbn13={book[1]?.isbn13} image={book[1]?.image} title={book[1].title} subtitle={book[1].subtitle} price={book[1].price} />
-            <BookCard key={book[2]?.isbn13} isbn13={book[2]?.isbn13} image={book[2]?.image} title={book[2].title} subtitle={book[2].subtitle} price={book[2].price} />
-        </div>
-    )
+  useEffect(() => {
+    dispatch(fetchBooks())
+  }, [dispatch])
+
+  function renderBooks () {
+    if (error) {
+      return <div className="text-center fs-5 mt-5">{error}</div>
+    }
+
+    if (isLoading) {
+      return <div className="text-center fs-5 mt-5">Loading...</div>
+    }
+
+    return books?.map((book) => {
+      return (
+        <BookCard key={book.isbn13} isbn13={book.isbn13} image={book.image} title={book.title} subtitle={book.subtitle} price={book.price} />
+      )
+    })
+  }
+
+  return (
+    <div className="d-flex flex-wrap justify-content-between gap-3" >
+      {renderBooks()}
+    </div>
+  )
 }

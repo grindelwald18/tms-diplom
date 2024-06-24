@@ -5,3 +5,9 @@ export interface IBookInfo {
     price: string
     image: string
 }
+
+export interface IBooksLIst {
+    list: IBookInfo[],
+    isLoading: boolean,
+    error: string | null,
+}
