@@ -28,7 +28,7 @@ export function Header() {
             <button type="submit" className="btn btn-warning">Search</button>
           </form>
           <NavLink className="nav-link px-2" to="/books/like">Like Books</NavLink>
-          <NavLink className="nav-link px-2" to="/books/read">Read Books</NavLink>
+          <NavLink className="nav-link px-2" to="/books/reade">Read Books</NavLink>
           <NavLink className="nav-link px-2" to="/basket"><CiShoppingBasket className='fs-4'/></NavLink>
         </div>
       </div>

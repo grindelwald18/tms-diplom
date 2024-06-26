@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk  } from '@reduxjs/toolkit'
-import { IBooksLIst } from '../models'
+import { IBooksLIst, IBookInfo } from '../models'
 import { requestNewBooks } from '../services/books'
-import { addBookToLocalStorage } from '../utils/workWithLocalStorage'
+import { addBookToLocalStorage, getBooksFromLocalStorage } from '../utils/workWithLocalStorage'
 
 const initialState: IBooksLIst = {
   list: [] ,
@@ -56,7 +56,17 @@ export const booksSlice = createSlice({
         state.isLoading = true
       })
       .addCase(fetchBooks.fulfilled, (state, action) => {
-        state.list = action.payload.books?.map((book: any) => ({ ...book, isLike: false, isReade: false }))
+        const booksFromLocalStorage = getBooksFromLocalStorage();
+        const books = action.payload.books?.map((book: IBookInfo) => {
+          const matchingBook = booksFromLocalStorage.find((b: IBookInfo) => b.isbn13 === book.isbn13);
+          if (matchingBook) {
+            return { ...book, isLike: matchingBook.isLike, isReade: matchingBook.isReade };
+          } else {
+            return { ...book, isLike: false, isReade: false };
+          }
+        });
+
+      state.list = books;
         state.isLoading = false
         state.error = null
       })
