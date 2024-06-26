@@ -35,4 +35,10 @@ function getBooksFromLocalStorage() {
   return books;
 }
 
-export { addBookToLocalStorage, deleteBookFromLocalStorage, getBooksFromLocalStorage };
+function getBooksFromBasket(){
+  const booksString = localStorage.getItem('basket');
+  const books = booksString ? JSON.parse(booksString) : [];
+  return books;
+}
+
+export { addBookToLocalStorage, deleteBookFromLocalStorage, getBooksFromLocalStorage, getBooksFromBasket };

@@ -4,6 +4,8 @@ import { Books } from './pages/Books'
 import { Book } from './pages/Book'
 import { LikeBooks } from './pages/LikeBooks'
 import { ReadeBooks } from './pages/ReadeBooks'
+import { SearchBooks } from './pages/SearchBooks'
+import { Basket } from './pages/Basket'
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +26,14 @@ export const router = createBrowserRouter([
       {
         path: '/books/reade',
         element: <ReadeBooks />
+      },
+      {
+        path: '/books/search/:search',
+        element: <SearchBooks />
+      },
+      {
+        path: '/basket',
+        element: <Basket />
       }
     ]
   }

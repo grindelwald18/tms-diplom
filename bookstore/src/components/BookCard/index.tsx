@@ -7,6 +7,7 @@ import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { likeBook, readeBook} from "../../redux/booksSlice";
 import './style.scss'
 export function BookCard(props: IBookInfo) {
+
   const dispatch = useDispatch<AppDispatch>()
 
   const checkLike = () => {

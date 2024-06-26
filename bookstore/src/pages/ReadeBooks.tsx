@@ -1,18 +1,12 @@
-import { useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
-import { AppDispatch, RootState } from '../redux/store'
-import { fetchBooks } from "../redux/booksSlice"
+import { useSelector } from "react-redux"
+import { RootState } from '../redux/store'
+import { getBooksFromLocalStorage } from '../utils/workWithLocalStorage'
 import { BookCard } from "../components/BookCard"
+import { IBookInfo } from "../models"
 export function ReadeBooks() {
-  const books = useSelector((state: RootState) => state.books.list.filter((book) => book.isReade));
+  const books = getBooksFromLocalStorage().filter((book:IBookInfo ) => book.isReade)
   const error = useSelector((state: RootState) => state.books.error);
   const isLoading = useSelector((state: RootState) => state.books.isLoading);
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(fetchBooks());
-  }, [dispatch]);
-
   function renderBooks() {
     if (error) {
       return <div className="text-center fs-5 mt-5">{error}</div>;
@@ -22,7 +16,7 @@ export function ReadeBooks() {
       return <div className="text-center fs-5 mt-5">Loading...</div>;
     }
 
-    return books.map((book) => {
+    return books.map((book: IBookInfo) => {
       return (
         <BookCard
           key={book.isbn13}
