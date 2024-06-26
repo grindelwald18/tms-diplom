@@ -1,11 +1,22 @@
+import { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchBooks } from '../../redux/booksSlice';
+import { RootState, AppDispatch } from '../../redux/store';
 import { IoGlobeOutline } from "react-icons/io5"
 import { CiShoppingBasket } from "react-icons/ci";
+import { QuantityMarker } from '../QuantityMarker';
 
 export function Header() {
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
+  const amountLike = useSelector((state: RootState) => state.books.list.filter((book) => book.isLike).length)
+  const amountReade = useSelector((state: RootState) => state.books.list.filter((book) => book.isReade).length)
+  const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    dispatch(fetchBooks())
+  }, [dispatch])
 
   function handleChangeSearch (event: any) {
       setSearch(event.target.value)
@@ -27,9 +38,9 @@ export function Header() {
             <input type="search" className="form-control me-1 w-75" placeholder='Book title' onChange={handleChangeSearch} value={search} />
             <button type="submit" className="btn btn-warning">Search</button>
           </form>
-          <NavLink className="nav-link px-2" to="/books/like">Like Books</NavLink>
-          <NavLink className="nav-link px-2" to="/books/reade">Read Books</NavLink>
-          <NavLink className="nav-link px-2" to="/basket"><CiShoppingBasket className='fs-4'/></NavLink>
+          <NavLink className="nav-link px-2 position-relative" to="/books/like">Like Books <QuantityMarker quantity={amountLike}/></NavLink>
+          <NavLink className="nav-link px-2 position-relative" to="/books/reade">Read Books <QuantityMarker quantity={amountReade}/></NavLink>
+          <NavLink className="nav-link px-2 position-relative" to="/basket"><CiShoppingBasket className='fs-4'/></NavLink>
         </div>
       </div>
     </nav>
