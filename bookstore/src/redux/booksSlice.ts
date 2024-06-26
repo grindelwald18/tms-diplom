@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk  } from '@reduxjs/toolkit'
 import { IBooksLIst } from '../models'
 import { requestNewBooks } from '../services/books'
+import { addBookToLocalStorage } from '../utils/workWithLocalStorage'
 
 const initialState: IBooksLIst = {
   list: [] ,
@@ -28,8 +29,10 @@ export const booksSlice = createSlice({
       if (foundBook) {
         if (foundBook.isLike) {
           foundBook.isLike = false
+          addBookToLocalStorage(foundBook)
         } else {
           foundBook.isLike = true
+          addBookToLocalStorage(foundBook)
         }
       }
     },
@@ -39,8 +42,10 @@ export const booksSlice = createSlice({
       if (foundBook) {
         if (foundBook.isReade) {
           foundBook.isReade = false
+          addBookToLocalStorage(foundBook)
         } else {
           foundBook.isReade = true
+          addBookToLocalStorage(foundBook)
         }
       }
     }
