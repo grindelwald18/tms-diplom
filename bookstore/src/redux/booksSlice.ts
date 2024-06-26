@@ -21,14 +21,37 @@ export const fetchBooks = createAsyncThunk('new/fetchBooks', async (_, { rejectW
 export const booksSlice = createSlice({
   name: 'books',
   initialState,
-  reducers: {},
+  reducers: {
+    likeBook: (state, action) => {
+      console.log(action.payload)
+      const foundBook = state.list.find((book) => book.isbn13 === action.payload)
+      if (foundBook) {
+        if (foundBook.isLike) {
+          foundBook.isLike = false
+        } else {
+          foundBook.isLike = true
+        }
+      }
+    },
+    readeBook: (state, action) => {
+      console.log(action.payload)
+      const foundBook = state.list.find((book) => book.isbn13 === action.payload)
+      if (foundBook) {
+        if (foundBook.isReade) {
+          foundBook.isReade = false
+        } else {
+          foundBook.isReade = true
+        }
+      }
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBooks.pending, (state) => {
         state.isLoading = true
       })
       .addCase(fetchBooks.fulfilled, (state, action) => {
-        state.list = action.payload.books
+        state.list = action.payload.books?.map((book: any) => ({ ...book, isLike: false, isReade: false }))
         state.isLoading = false
         state.error = null
       })
@@ -39,4 +62,5 @@ export const booksSlice = createSlice({
   }
 })
 
+export const { likeBook, readeBook } = booksSlice.actions
 export const booksReducer = booksSlice.reducer

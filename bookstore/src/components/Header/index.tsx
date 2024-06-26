@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { IoGlobeOutline } from "react-icons/io5"
+import { CiShoppingBasket } from "react-icons/ci";
 
 export function Header() {
   const [search, setSearch] = useState('')
@@ -28,6 +29,7 @@ export function Header() {
           </form>
           <NavLink className="nav-link px-2" to="/books/like">Like Books</NavLink>
           <NavLink className="nav-link px-2" to="/books/read">Read Books</NavLink>
+          <NavLink className="nav-link px-2" to="/basket"><CiShoppingBasket className='fs-4'/></NavLink>
         </div>
       </div>
     </nav>

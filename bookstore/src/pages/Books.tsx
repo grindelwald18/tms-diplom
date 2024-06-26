@@ -1,9 +1,10 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useParams, Link} from "react-router-dom"
 import { AppDispatch, RootState } from '../redux/store'
 import { fetchBooks } from "../redux/booksSlice"
 import { BookCard } from "../components/BookCard"
+
+
 export function Books() {
   const books = useSelector((state: RootState) => state.books.list)
   const error = useSelector((state: RootState) => state.books.error)
@@ -25,7 +26,7 @@ export function Books() {
 
     return books?.map((book) => {
       return (
-        <BookCard key={book.isbn13} isbn13={book.isbn13} image={book.image} title={book.title} subtitle={book.subtitle} price={book.price} />
+        <BookCard key={book.isbn13} isbn13={book.isbn13} image={book.image} title={book.title} subtitle={book.subtitle} price={book.price} isLike={book.isLike} isReade={book.isReade}/>
       )
     })
   }
