@@ -32,6 +32,10 @@ export const router = createBrowserRouter([
         element: <SearchBooks />
       },
       {
+        path: '/books/search/:search/:currentPage',
+        element: <SearchBooks />
+      },
+      {
         path: '/basket',
         element: <Basket />
       }

@@ -5,7 +5,7 @@ import { BookCard } from "../components/BookCard"
 import { IBookInfo } from "../models"
 export function LikeBooks() {
 
-  const books = getBooksFromLocalStorage()
+  const books = getBooksFromLocalStorage().filter((book:IBookInfo ) => book.isLike)
   const error = useSelector((state: RootState) => state.books.error);
   const isLoading = useSelector((state: RootState) => state.books.isLoading);
 

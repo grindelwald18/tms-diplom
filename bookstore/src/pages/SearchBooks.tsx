@@ -1,22 +1,24 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { AppDispatch, RootState } from '../redux/store'
 import { fetchSearchBooks } from "../redux/booksSlice"
 import { BookCard } from "../components/BookCard"
-
+import { buildPaginationScheme } from "../utils/buildPaginationScheme"
 
 export function SearchBooks() {
   const books = useSelector((state: RootState) => state.books.list)
   const error = useSelector((state: RootState) => state.books.error)
   const isLoading = useSelector((state: RootState) => state.books.isLoading)
   const dispatch = useDispatch<AppDispatch>()
-  const { search }: any = useParams()
-  console.log(search)
+  const { search } = useParams<{search: string}>()
+  const { currentPage } = useParams<{currentPage: string}>()
+  const pagesCount = useSelector((state: RootState) => state.books.pagesCount)
+  const page = currentPage? currentPage : '1'
 
   useEffect(() => {
-    dispatch(fetchSearchBooks(search))
-  }, [dispatch])
+    dispatch(fetchSearchBooks({ search: search || '', page: page }))
+  }, [dispatch, search, currentPage])
 
   function renderBooks () {
     if (error) {
@@ -34,11 +36,42 @@ export function SearchBooks() {
     })
   }
 
+  function renderPagination () {
+    if (!pagesCount) return null
+
+    const paginationScheme = buildPaginationScheme(page, pagesCount)
+
+    return (
+      <ul className="pagination">
+        {paginationScheme.map((item, index) => {
+          if (item === '...') {
+            return (
+              <li className="page-item" key={index}>
+                <span className="page-link">...</span>
+              </li>
+            )
+          }
+
+          return (
+            <li className="page-item" key={index}>
+              <Link className="page-link" to={`/books/search/${search}/${item}`}>
+                {item}
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    )
+  }
+
   return (
     <>
       <h1 className="text-center">Search results for "{search}"</h1>
       <div className="d-flex flex-wrap justify-content-between gap-3" >
         {renderBooks()}
+      </div>
+      <div className="wrapper-pagination mt-4 d-flex justify-content-center">
+        {renderPagination()}
       </div>
     </>
   )

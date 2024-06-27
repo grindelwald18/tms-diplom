@@ -8,7 +8,7 @@ const initialState: IBooksLIst = {
   list: [] ,
   isLoading: false,
   error: null,
-  limit: 6,
+  limit: 10,
   pagesCount: null
 }
 
@@ -20,9 +20,10 @@ export const fetchBooks = createAsyncThunk('new/fetchBooks', async (_, { rejectW
     }
   })
 
-export const fetchSearchBooks = createAsyncThunk('search/fetchBooks', async (search: string, { rejectWithValue }) => {
+export const fetchSearchBooks = createAsyncThunk('search/fetchBooks', async (params: { search: string, page: string }, { rejectWithValue }) => {
     try {
-      return await requestSearchBooks(search)
+      const { search, page } = params
+      return await requestSearchBooks(search, page)
     } catch (e) {
       return rejectWithValue((e as Error).message)
     }
@@ -111,7 +112,7 @@ export const booksSlice = createSlice({
       })
       .addCase(fetchSearchBooks.fulfilled, (state, action) => {
         const booksFromLocalStorage = getBooksFromLocalStorage();
-        const books = action.payload?.map((book: IBookInfo) => {
+        const books = action.payload.books?.map((book: IBookInfo) => {
           const matchingBook = booksFromLocalStorage.find((b: IBookInfo) => b.isbn13 === book.isbn13);
           if (matchingBook) {
             return {
@@ -132,6 +133,7 @@ export const booksSlice = createSlice({
 
         state.list = books;
         state.isLoading = false
+        state.pagesCount = Math.ceil(action.payload.total / state.limit)
         state.error = null
       })
       .addCase(fetchSearchBooks.rejected, (state, action) => {

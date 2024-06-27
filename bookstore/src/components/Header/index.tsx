@@ -25,7 +25,6 @@ export function Header() {
   useEffect(() => {
     setAmountLike(booksInStorage?.filter((book: any) => book.isLike).length)
     setAmountReade(booksInStorage?.filter((book: any) => book.isReade).length)
-    // setAmountBasket(booksInStorage?.filter((book: any) => book.isBasket).length)
   }, [booksInStorage])
 
   useEffect(() => {
