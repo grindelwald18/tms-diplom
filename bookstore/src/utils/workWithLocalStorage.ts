@@ -41,4 +41,31 @@ function getBooksFromBasket(){
   return books;
 }
 
-export { addBookToLocalStorage, deleteBookFromLocalStorage, getBooksFromLocalStorage, getBooksFromBasket };
+function addBookToBasket(book: IBookInfo) {
+  const booksString = localStorage.getItem('basket');
+  let books = booksString ? JSON.parse(booksString) : [];
+  const existingBook = books.find((b: { isbn13: string }) => b.isbn13 === book.isbn13);
+  if (existingBook) {
+    Object.assign(existingBook, book);
+  } else {
+    books.push(book);
+  }
+  try {
+    localStorage.setItem('basket', JSON.stringify(books));
+  } catch (error) {
+    console.error('Error saving book to local storage:', error);
+  }
+}
+
+function removeBookFromBasket(isbn13: string) {
+  const booksString = localStorage.getItem('basket');
+  const books = booksString ? JSON.parse(booksString) : [];
+  const newBooks = books.filter((b: { isbn13: string }) => b.isbn13 !== isbn13);
+  try {
+    localStorage.setItem('basket', JSON.stringify(newBooks));
+  } catch (error) {
+    console.error('Error deleting book from local storage:', error);
+  }
+}
+
+export { addBookToLocalStorage, deleteBookFromLocalStorage, getBooksFromLocalStorage, getBooksFromBasket, addBookToBasket, removeBookFromBasket };

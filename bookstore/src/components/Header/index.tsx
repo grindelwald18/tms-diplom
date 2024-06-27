@@ -14,17 +14,23 @@ export function Header() {
   const dispatch = useDispatch<AppDispatch>()
   const books = useSelector((state: RootState) => state.books.list)
   const booksInStorage = getBooksFromLocalStorage()
+  const booksInBasket = getBooksFromBasket()
   const [amountLike, setAmountLike] = useState(0)
   const [amountReade, setAmountReade] = useState(0)
+  const [amountBasket, setAmountBasket] = useState(0)
 
   // const amountLike =  books?.filter((book: any) => book.isLike).length
   // const amountReade = books?.filter((book: any) => book.isReade).length
-  const amountBasket = getBooksFromBasket()?.length
 
   useEffect(() => {
     setAmountLike(booksInStorage?.filter((book: any) => book.isLike).length)
     setAmountReade(booksInStorage?.filter((book: any) => book.isReade).length)
+    // setAmountBasket(booksInStorage?.filter((book: any) => book.isBasket).length)
   }, [booksInStorage])
+
+  useEffect(() => {
+    setAmountBasket(booksInBasket?.length)
+  }, [booksInBasket])
 
   useEffect(() => {
     dispatch(fetchBooks())

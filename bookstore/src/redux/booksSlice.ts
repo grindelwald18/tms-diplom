@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk  } from '@reduxjs/toolkit'
 import { IBooksLIst, IBookInfo } from '../models'
 import { requestNewBooks } from '../services/books'
 import { requestSearchBooks } from '../services/search'
-import { addBookToLocalStorage, getBooksFromLocalStorage } from '../utils/workWithLocalStorage'
+import { addBookToLocalStorage, getBooksFromLocalStorage, addBookToBasket, getBooksFromBasket} from '../utils/workWithLocalStorage'
 
 const initialState: IBooksLIst = {
   list: [] ,
@@ -45,7 +45,6 @@ export const booksSlice = createSlice({
       }
     },
     readeBook: (state, action) => {
-      console.log(action.payload)
       const foundBook = state.list.find((book) => book.isbn13 === action.payload)
       if (foundBook) {
         if (foundBook.isReade) {
@@ -54,6 +53,18 @@ export const booksSlice = createSlice({
         } else {
           foundBook.isReade = true
           addBookToLocalStorage(foundBook)
+        }
+      }
+    },
+    addToBasket: (state, action) => {
+      const foundBook = state.list.find((book) => book.isbn13 === action.payload)
+      if (foundBook) {
+        if (foundBook.inBasket) {
+          foundBook.inBasket = false
+          addBookToBasket(foundBook)
+        } else {
+          foundBook.inBasket = true
+          addBookToBasket(foundBook)
         }
       }
     }
@@ -65,18 +76,30 @@ export const booksSlice = createSlice({
       })
       .addCase(fetchBooks.fulfilled, (state, action) => {
         const booksFromLocalStorage = getBooksFromLocalStorage();
+        const bookFromBAsket = getBooksFromBasket();
         const books = action.payload.books?.map((book: IBookInfo) => {
           const matchingBook = booksFromLocalStorage.find((b: IBookInfo) => b.isbn13 === book.isbn13);
+          const matchingBookFromBasket = bookFromBAsket.find((b: IBookInfo) => b.isbn13 === book.isbn13);
           if (matchingBook) {
-            return { ...book, isLike: matchingBook.isLike, isReade: matchingBook.isReade };
+            return {
+              ...book,
+              isLike: matchingBook.isLike,
+              isReade: matchingBook.isReade,
+              inBasket: matchingBookFromBasket?.inBasket ?? false,
+            };
           } else {
-            return { ...book, isLike: false, isReade: false };
+            return {
+              ...book,
+              isLike: false,
+              isReade: false,
+              inBasket: matchingBookFromBasket?.inBasket ?? false,
+            };
           }
         });
 
         state.list = books;
-        state.isLoading = false
-        state.error = null
+        state.isLoading = false;
+        state.error = null;
       })
       .addCase(fetchBooks.rejected, (state, action) => {
         state.isLoading = false
@@ -91,9 +114,19 @@ export const booksSlice = createSlice({
         const books = action.payload?.map((book: IBookInfo) => {
           const matchingBook = booksFromLocalStorage.find((b: IBookInfo) => b.isbn13 === book.isbn13);
           if (matchingBook) {
-            return { ...book, isLike: matchingBook.isLike, isReade: matchingBook.isReade };
+            return {
+              ...book,
+              isLike: matchingBook.isLike,
+              isReade: matchingBook.isReade,
+              inBasket: matchingBook.inBasket
+            };
           } else {
-            return { ...book, isLike: false, isReade: false };
+            return {
+              ...book,
+              isLike: false,
+              isReade: false,
+              inBasket: false
+            };
           }
         });
 
@@ -108,5 +141,5 @@ export const booksSlice = createSlice({
   }
 })
 
-export const { likeBook, readeBook } = booksSlice.actions
+export const { likeBook, readeBook, addToBasket } = booksSlice.actions
 export const booksReducer = booksSlice.reducer

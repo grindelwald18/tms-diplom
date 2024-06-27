@@ -6,6 +6,7 @@ export interface IBookInfo {
     image: string
     isLike?: boolean
     isReade?: boolean
+    inBasket?: boolean
 }
 
 export interface IMAXBookInfo {
